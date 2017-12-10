@@ -1,0 +1,14 @@
+{
+  "images": [
+    {
+      "tag": "corpusops/docker-matrix:v0.25.1",
+      "builder_type": "docker",
+      "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
+    },
+    {
+      "tag": "corpusops/docker-matrix:v0.25.0",
+      "builder_type": "docker",
+      "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
+    }
+  ]
+}
