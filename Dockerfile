@@ -84,7 +84,7 @@ RUN set -ex \
     ; \
     git clone https://github.com/maxidor/matrix-synapse-rest-auth.git ; \
     cd matrix-synapse-rest-auth ; \
-    sudo cp rest_auth_provider.py /usr/lib/python2.7/dist-packages/ \
+    cp rest_auth_provider.py /usr/lib/python2.7/dist-packages/ \
     ; \
     git clone --branch $BV_SYN --depth 1 https://github.com/matrix-org/synapse.git \
     && cd /synapse \
