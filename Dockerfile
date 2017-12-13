@@ -39,6 +39,7 @@ RUN set -ex \
     && apt-get upgrade -y \
     && apt-get install -y \
         bash \
+        curl postgresql-client\
         coreutils \
         coturn \
         file \
