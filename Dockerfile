@@ -1,47 +1,28 @@
 FROM debian:jessie
-
-# Maintainer
-MAINTAINER Silvio Fricke <silvio.fricke@gmail.com>
-
-# install homerserver template
-COPY adds/start.sh /start.sh
-
-# add supervisor configs
-COPY adds/supervisord-matrix.conf /conf/
-COPY adds/supervisord-turnserver.conf /conf/
-COPY adds/supervisord.conf /
-
-# startup configuration
-ENTRYPOINT ["/start.sh"]
-CMD ["start"]
-EXPOSE 8448
-VOLUME ["/data"]
-
 # Git branch to build from
 ARG BV_SYN=master
-ARG BV_TUR=master
+# use --build-arg REBUILD=$(date) to invalidate the cache and upgrade all
+# packages
+ARG REBUILD=0
+
+VOLUME ["/data"]
+
 # https://github.com/python-pillow/Pillow/issues/1763
 ENV LIBRARY_PATH=/lib:/usr/lib
-
 # user configuration
 ENV MATRIX_UID=991 MATRIX_GID=991
 
-# use --build-arg REBUILD=$(date) to invalidate the cache and upgrade all
-# packages
-ARG REBUILD=1
-RUN set -ex \
-    && mkdir /uploads \
-    && export DEBIAN_FRONTEND=noninteractive \
-    && mkdir -p /var/cache/apt/archives \
-    && touch /var/cache/apt/archives/lock \
-    && apt-get clean \
-    && apt-get update -y \
-    && apt-get upgrade -y \
-    && apt-get install -y \
+RUN set -ex;\
+    mkdir /uploads;\
+    export DEBIAN_FRONTEND=noninteractive;\
+    mkdir -p /var/cache/apt/archives;\
+    touch /var/cache/apt/archives/lock;\
+    apt-get clean;\
+    apt-get update -y;\
+    apt-get install -y \
         bash \
         curl postgresql-client\
         coreutils \
-        coturn \
         file \
         gcc \
         git \
@@ -73,29 +54,31 @@ RUN set -ex \
         python-virtualenv \
         sqlite \
         zlib1g \
-        zlib1g-dev \
-    ; \
-    pip install --upgrade pip ;\
-    pip install --upgrade python-ldap ;\
-    pip install --upgrade pyopenssl ;\
-    pip install --upgrade enum34 ;\
-    pip install --upgrade ipaddress ;\
-    pip install --upgrade lxml ;\
-    pip install --upgrade supervisor \
-    ; \
-    git clone https://github.com/maxidor/matrix-synapse-rest-auth.git \
-    && cd matrix-synapse-rest-auth \
-    && cp rest_auth_provider.py /usr/lib/python2.7/dist-packages/ \
-    && cd / \
-    ; \
-    git clone --branch $BV_SYN --depth 1 https://github.com/matrix-org/synapse.git \
-    && cd /synapse \
-    && pip install --upgrade --process-dependency-links . \
-    && GIT_SYN=$(git ls-remote https://github.com/matrix-org/synapse $BV_SYN | cut -f 1) \
-    && echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version \
-    && cd / \
-    && rm -rf /synapse \
-    ; \
+        zlib1g-dev;\
+    :;\
+    pip install --upgrade pip;\
+    pip install --upgrade python-ldap;\
+    pip install --upgrade pyopenssl;\
+    pip install --upgrade enum34;\
+    pip install --upgrade ipaddress;\
+    pip install --upgrade lxml;\
+    pip install --upgrade supervisor
+# Git branch to build from
+RUN set -ex;\
+    :;\
+    git clone https://github.com/maxidor/matrix-synapse-rest-auth.git;\
+    cd matrix-synapse-rest-auth;\
+    cp rest_auth_provider.py /usr/lib/python2.7/dist-packages/;\
+    cd /;\
+    :;\
+    git clone --branch $BV_SYN --depth 1 https://github.com/matrix-org/synapse.git;\
+    cd /synapse;\
+    pip install --upgrade --process-dependency-links .;\
+    GIT_SYN=$(git ls-remote https://github.com/matrix-org/synapse $BV_SYN | cut -f 1);\
+    echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version;\
+    cd /;\
+    rm -rf /synapse;\
+    :;\
     apt-get autoremove -y \
         file \
         gcc \
@@ -112,7 +95,19 @@ RUN set -ex \
         linux-headers-amd64 \
         make \
         python-dev \
-        zlib1g-dev \
-    ; \
+        zlib1g-dev;\
+    :;\
     apt-get autoremove -y ;\
     rm -rf /var/lib/apt/* /var/cache/apt/*
+
+# install homerserver template
+COPY adds/start.sh /start.sh
+# add supervisor configs
+COPY adds/supervisord-matrix.conf /conf/
+COPY adds/supervisord.conf /
+
+# startup configuration
+ENTRYPOINT ["/start.sh"]
+CMD ["start"]
+EXPOSE 8448
+
