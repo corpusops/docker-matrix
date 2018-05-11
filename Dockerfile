@@ -49,13 +49,15 @@ RUN set -ex;\
         pwgen \
         python \
         python-dev \
-        python-pip \
-        python-psycopg2 \
-        python-virtualenv \
         sqlite \
         zlib1g \
         zlib1g-dev;\
     :;\
+    curl -O https://bootstrap.pypa.io/get-pip.py;\
+    python get-pip.py;\
+    apt-get install -y \
+        python-psycopg2 \
+        python-virtualenv;\
     pip install --upgrade pip;\
     pip install --upgrade python-ldap;\
     pip install --upgrade pyopenssl;\
