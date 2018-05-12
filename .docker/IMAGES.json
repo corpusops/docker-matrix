@@ -1,7 +1,7 @@
 {
   "images": [
     {
-      "tag": "corpusops/docker-matrix:v0.27.0-rc2",
+      "tag": "corpusops/docker-matrix:v0.28.1",
       "builder_type": "docker",
       "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
     },
