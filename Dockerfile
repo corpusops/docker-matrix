@@ -59,11 +59,6 @@ RUN set -ex;\
         python-psycopg2 \
         python-virtualenv;\
     pip install --upgrade pip;\
-    pip install --upgrade python-ldap;\
-    pip install --upgrade pyopenssl;\
-    pip install --upgrade enum34;\
-    pip install --upgrade ipaddress;\
-    pip install --upgrade lxml;\
     pip install --upgrade supervisor
 # Git branch to build from
 RUN set -ex;\
@@ -75,6 +70,11 @@ RUN set -ex;\
     :;\
     git clone --branch $BV_SYN --depth 1 https://github.com/matrix-org/synapse.git;\
     cd /synapse;\
+    python synapse/python_dependencies.py | xargs pip install --upgrade;\
+    pip install --upgrade python-ldap;\
+    pip install --upgrade enum34;\
+    pip install --upgrade ipaddress;\
+    pip install --upgrade lxml;\
     pip install --upgrade --process-dependency-links .;\
     GIT_SYN=$(git ls-remote https://github.com/matrix-org/synapse $BV_SYN | cut -f 1);\
     echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version;\
