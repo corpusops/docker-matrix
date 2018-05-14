@@ -16,6 +16,9 @@ env:
       release="$COPS_ROOT/hacking/docker_release" \
       silent_rm="$silent rm -rf"
   matrix:
+    - __VERSION__="v0.27.0-rc2" \
+      DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
+      IMAGE="dockerfile__$DOCKER_IMAGE"
     - __VERSION__="v0.26.1" \
       DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
       IMAGE="dockerfile__$DOCKER_IMAGE"
