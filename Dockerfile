@@ -49,6 +49,7 @@ RUN set -ex;\
         pwgen \
         python \
         python-dev \
+        libpq5 libpq5-dev\
         sqlite \
         zlib1g \
         zlib1g-dev;\
@@ -56,7 +57,6 @@ RUN set -ex;\
     curl -O https://bootstrap.pypa.io/get-pip.py;\
     python get-pip.py;\
     apt-get install -y \
-        python-psycopg2 \
         python-virtualenv;\
     pip install --upgrade pip;\
     pip install --upgrade supervisor
@@ -92,6 +92,7 @@ RUN set -ex;\
         libsqlite3-dev \
         libssl-dev \
         libtool \
+        libpq5-dev \
         libxml2-dev \
         libxslt1-dev \
         linux-headers-amd64 \
