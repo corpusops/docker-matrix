@@ -49,7 +49,7 @@ RUN set -ex;\
         pwgen \
         python \
         python-dev \
-        libpq5 libpq5-dev\
+        libpq5 libpq-dev\
         sqlite \
         zlib1g \
         zlib1g-dev;\
@@ -92,7 +92,7 @@ RUN set -ex;\
         libsqlite3-dev \
         libssl-dev \
         libtool \
-        libpq5-dev \
+        libpq-dev \
         libxml2-dev \
         libxslt1-dev \
         linux-headers-amd64 \
