@@ -11,6 +11,8 @@ VOLUME ["/data"]
 ENV LIBRARY_PATH=/lib:/usr/lib
 # user configuration
 ENV MATRIX_UID=991 MATRIX_GID=991
+ENV MATRIX_URL=https://github.com/matrix-org/synapse
+ENV MATRIX_URL=https://github.com/corpusops/synapse
 
 RUN set -ex;\
     mkdir /uploads;\
@@ -68,7 +70,7 @@ RUN set -ex;\
     cp rest_auth_provider.py /usr/lib/python2.7/dist-packages/;\
     cd /;\
     :;\
-    git clone --branch $BV_SYN --depth 1 https://github.com/matrix-org/synapse.git;\
+    git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git;\
     cd /synapse;\
     python synapse/python_dependencies.py | xargs pip install --upgrade;\
     pip install --upgrade python-ldap;\
@@ -76,7 +78,7 @@ RUN set -ex;\
     pip install --upgrade ipaddress;\
     pip install --upgrade lxml;\
     pip install --upgrade --process-dependency-links .;\
-    GIT_SYN=$(git ls-remote https://github.com/matrix-org/synapse $BV_SYN | cut -f 1);\
+    GIT_SYN=$(git ls-remote ${MATRIX_URL} $BV_SYN | cut -f 1);\
     echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version;\
     cd /;\
     rm -rf /synapse;\
