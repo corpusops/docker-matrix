@@ -23,7 +23,7 @@ env:
     - __VERSION__="master" \
       DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
       IMAGE="dockerfile__$DOCKER_IMAGE"
-    - __VERSION__="v0.33.9rc1" \
+    - __VERSION__="v0.33.9" \
       DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
       IMAGE="dockerfile__$DOCKER_IMAGE"
 language: python

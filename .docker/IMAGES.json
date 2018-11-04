@@ -11,7 +11,7 @@
       "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
     },  
     {
-      "tag": "corpusops/docker-matrix:v0.33.9rc1",
+      "tag": "corpusops/docker-matrix:v0.33.9",
       "builder_type": "docker",
       "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
     },  
