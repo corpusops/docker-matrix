@@ -11,8 +11,8 @@ VOLUME ["/data"]
 ENV LIBRARY_PATH=/lib:/usr/lib
 # user configuration
 ENV MATRIX_UID=991 MATRIX_GID=991
-ENV MATRIX_URL=https://github.com/matrix-org/synapse
 ENV MATRIX_URL=https://github.com/corpusops/synapse
+ENV MATRIX_URL=https://github.com/matrix-org/synapse
 
 RUN set -ex;\
     mkdir /uploads;\
