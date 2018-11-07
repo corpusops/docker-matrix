@@ -1,20 +1,38 @@
 {
-  "images": [   
+  "images": [
+    {
+      "tag": "corpusops/docker-matrix:develop-py36",
+      "builder_type": "docker",
+      "dockerfile": "Dockerfile.36",
+      "extra_args": "--build-arg BV_SYN=develop"
+    },
+    {
+      "tag": "corpusops/docker-matrix:master-py36",
+      "builder_type": "docker",
+      "dockerfile": "Dockerfile.36",
+      "extra_args": "--build-arg BV_SYN=master"
+    },
+    {
+      "tag": "corpusops/docker-matrix:v0.33.9-py36",
+      "builder_type": "docker",
+      "dockerfile": "Dockerfile.36",
+      "extra_args": "--build-arg BV_SYN=v0.33.9"
+    },
     {
       "tag": "corpusops/docker-matrix:develop",
       "builder_type": "docker",
       "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
-    },  
+    },
     {
       "tag": "corpusops/docker-matrix:master",
       "builder_type": "docker",
       "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
-    },  
+    },
     {
       "tag": "corpusops/docker-matrix:v0.33.9",
       "builder_type": "docker",
       "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
-    },  
+    },
     {
       "tag": "corpusops/docker-matrix:v0.33.8-tmpfix-4160.1",
       "builder_type": "docker",

@@ -16,7 +16,16 @@ env:
       sync_code="$install -C --synchronize-code --skip-sync-core" \
       release="$COPS_ROOT/hacking/docker_release" \
       silent_rm="$silent rm -rf"
-  matrix:  
+  matrix:
+    - __VERSION__="develop-py36" \
+      DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
+      IMAGE="dockerfile__$DOCKER_IMAGE"
+    - __VERSION__="master-py36" \
+      DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
+      IMAGE="dockerfile__$DOCKER_IMAGE"
+    - __VERSION__="v0.33.9-py36" \
+      DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
+      IMAGE="dockerfile__$DOCKER_IMAGE"
     - __VERSION__="develop" \
       DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
       IMAGE="dockerfile__$DOCKER_IMAGE"
