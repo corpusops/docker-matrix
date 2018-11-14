@@ -17,7 +17,7 @@ env:
       release="$COPS_ROOT/hacking/docker_release" \
       silent_rm="$silent rm -rf"
   matrix:
-    - __VERSION__="v0.33.8" \
+    - __VERSION__="v0.33.8-tmpfix-4160.1" \
       DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
       IMAGE="dockerfile__$DOCKER_IMAGE"
 language: python
