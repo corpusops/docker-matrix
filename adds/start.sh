@@ -8,7 +8,7 @@ fi
 
 generate_synapse_file() {
     local filepath="${1}"
-    python -m synapse.app.homeserver \
+   $MATRIX_PYTHON -m synapse.app.homeserver \
            --config-path "${filepath}" \
            --generate-config \
            --report-stats ${REPORT_STATS} \

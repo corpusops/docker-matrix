@@ -17,22 +17,7 @@ env:
       release="$COPS_ROOT/hacking/docker_release" \
       silent_rm="$silent rm -rf"
   matrix:
-    - __VERSION__="develop-py36" \
-      DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
-      IMAGE="dockerfile__$DOCKER_IMAGE"
-    - __VERSION__="master-py36" \
-      DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
-      IMAGE="dockerfile__$DOCKER_IMAGE"
-    - __VERSION__="v0.33.9-py36" \
-      DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
-      IMAGE="dockerfile__$DOCKER_IMAGE"
-    - __VERSION__="develop" \
-      DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
-      IMAGE="dockerfile__$DOCKER_IMAGE"
-    - __VERSION__="master" \
-      DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
-      IMAGE="dockerfile__$DOCKER_IMAGE"
-    - __VERSION__="v0.33.9" \
+    - __VERSION__="v0.99.1.1" \
       DOCKER_IMAGE="corpusops/${__NAME__}:${__VERSION__}" \
       IMAGE="dockerfile__$DOCKER_IMAGE"
 language: python

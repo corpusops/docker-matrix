@@ -40,7 +40,7 @@ RUN set -ex;\
         libsasl2-dev \
         libsqlite3-dev \
         libssl-dev \
-        libssl1.0.2 \
+        libssl1.1 \
         libtool \
         libxml2 \
         libxml2-dev \
@@ -76,12 +76,14 @@ RUN set -ex;\
     :;\
     git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git;\
     cd /synapse;\
-    python3 synapse/python_dependencies.py | xargs python3 -m pip install --upgrade;\
+    : hack as synapse/types.py does a messy shadow ;\
+    cp synapse/python_dependencies.py /tmp;\
+    python3 /tmp/python_dependencies.py | xargs python3 -m pip install --upgrade;\
     python3 -m pip install --upgrade python-ldap;\
-    python3 -m pip install --upgrade enum34;\
+    : already in stdlib python3 -m pip install --upgrade enum34;\
     python3 -m pip install --upgrade ipaddress;\
     python3 -m pip install --upgrade lxml;\
-    python3 -m pip install --upgrade --process-dependency-links .;\
+    python3 -m pip install --upgrade $(pwd)[all];\
     GIT_SYN=$(git ls-remote ${MATRIX_URL} $BV_SYN | cut -f 1);\
     echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version;\
     cd /;\
