@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:buster
 # Git branch to build from
 ARG BV_SYN=master
 # use --build-arg REBUILD=$(date) to invalidate the cache and upgrade all
@@ -28,7 +28,7 @@ RUN set -ex;\
         file \
         gcc \
         git \
-        libevent-2.0-5 \
+        libevent-2.1-6 \
         libevent-dev \
         libffi-dev \
         libffi6 \
@@ -40,7 +40,7 @@ RUN set -ex;\
         libsasl2-dev \
         libsqlite3-dev \
         libssl-dev \
-        libssl1.0.0 \
+        libssl1.1 \
         libtool \
         libxml2 \
         libxml2-dev \
@@ -67,7 +67,9 @@ RUN set -ex;\
     :;\
     git clone https://github.com/maxidor/matrix-synapse-rest-auth.git;\
     cd matrix-synapse-rest-auth;\
-    cp rest_auth_provider.py /usr/lib/python2.7/dist-packages/;\
+    for i in /usr/lib/python*/dist-packages/; do\
+      cp -fv rest_auth_provider.py "$i";\
+    done;\
     cd /;\
     :;\
     git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git;\
@@ -77,7 +79,7 @@ RUN set -ex;\
     pip install --upgrade enum34;\
     pip install --upgrade ipaddress;\
     pip install --upgrade lxml;\
-    pip install --upgrade --process-dependency-links .;\
+    pip install --upgrade $(pwd)[all];\
     GIT_SYN=$(git ls-remote ${MATRIX_URL} $BV_SYN | cut -f 1);\
     echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version;\
     cd /;\
@@ -110,9 +112,11 @@ COPY adds/start.sh /start.sh
 # add supervisor configs
 COPY adds/supervisord-matrix.conf /conf/
 COPY adds/supervisord.conf /
+RUN sed -i -re "s/python3/python/g" /conf/*
 
 # startup configuration
 ENTRYPOINT ["/start.sh"]
+ENV MATRIX_PYTHON=python3
 CMD ["start"]
 EXPOSE 8448
 
