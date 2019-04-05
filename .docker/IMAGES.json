@@ -11,6 +11,12 @@
       "builder_type": "docker",
       "dockerfile": "Dockerfile.36",
       "extra_args": "--build-arg BV_SYN=master"
+    }, 
+    {
+      "tag": "corpusops/docker-matrix:v0.99.3-py36",
+      "builder_type": "docker",
+      "dockerfile": "Dockerfile.36",
+      "extra_args": "--build-arg BV_SYN=v0.99.3"
     },
     {
       "tag": "corpusops/docker-matrix:v0.99.1.1-py36",
@@ -31,6 +37,11 @@
     },
     {
       "tag": "corpusops/docker-matrix:master",
+      "builder_type": "docker",
+      "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
+    }, 
+    {
+      "tag": "corpusops/docker-matrix:v0.99.3",
       "builder_type": "docker",
       "extra_args": "--build-arg BV_SYN={img_parts[tag]}"
     },
