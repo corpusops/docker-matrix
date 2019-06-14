@@ -68,17 +68,19 @@ RUN set -ex;\
 RUN set -ex;\
     :;\
     git clone https://github.com/maxidor/matrix-synapse-rest-auth.git;\
+    :;\
     cd matrix-synapse-rest-auth;\
     for i in /usr/lib/python*/dist-packages/; do\
       cp -fv rest_auth_provider.py "$i";\
     done;\
     cd /;\
     :;\
-    git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git;\
+    git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git
+RUN set -ex;\
     cd /synapse;\
     : hack as synapse/types.py does a messy shadow ;\
     cp synapse/python_dependencies.py /tmp;\
-    python3 /tmp/python_dependencies.py | xargs python3 -m pip install --upgrade;\
+    python3 /tmp/python_dependencies.py | grep -v eliot|xargs python3 -m pip install --upgrade;\
     python3 -m pip install --upgrade python-ldap;\
     : already in stdlib python3 -m pip install --upgrade enum34;\
     python3 -m pip install --upgrade ipaddress;\
