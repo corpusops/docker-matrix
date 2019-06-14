@@ -74,7 +74,7 @@ RUN set -ex;\
     :;\
     git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git;\
     cd /synapse;\
-    python synapse/python_dependencies.py | xargs pip install --upgrade;\
+    python synapse/python_dependencies.py | grep -v eliot|xargs pip install --upgrade;\
     pip install --upgrade python-ldap;\
     pip install --upgrade enum34;\
     pip install --upgrade ipaddress;\
