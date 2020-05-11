@@ -13,6 +13,12 @@
       "extra_args": "--build-arg BV_SYN=master"
     },
     {
+      "tag": "corpusops/docker-matrix:v1.12.4-py36",
+      "builder_type": "docker",
+      "dockerfile": "Dockerfile.36",
+      "extra_args": "--build-arg BV_SYN=v1.12.4"
+    },
+    {
       "tag": "corpusops/docker-matrix:v1.1.0-py36",
       "builder_type": "docker",
       "dockerfile": "Dockerfile.36",
