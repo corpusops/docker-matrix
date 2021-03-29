@@ -49,8 +49,8 @@ RUN set -ex;\
         linux-headers-amd64 \
         make \
         pwgen \
-        python3 python3-dev \
-        python python-dev \
+        python \
+        python-dev \
         libpq5 libpq-dev\
         sqlite \
         zlib1g \
@@ -58,34 +58,28 @@ RUN set -ex;\
     :;\
     curl -O https://bootstrap.pypa.io/get-pip.py;\
     python get-pip.py;\
-    python3 get-pip.py;\
     apt-get install -y \
         python-virtualenv;\
-    python  -m pip install --upgrade pip;\
-    python3 -m pip install --upgrade pip;\
-    python  -m pip install --upgrade supervisor
+    pip install --upgrade pip;\
+    pip install --upgrade supervisor
 # Git branch to build from
 RUN set -ex;\
     :;\
-    git clone https://github.com/ma1uta/matrix-synapse-rest-password-provider.git;\
-    :;\
-    cd matrix-synapse-rest-password-provider;\
+    git clone https://github.com/maxidor/matrix-synapse-rest-auth.git;\
+    cd matrix-synapse-rest-auth;\
     for i in /usr/lib/python*/dist-packages/; do\
       cp -fv rest_auth_provider.py "$i";\
     done;\
     cd /;\
     :;\
-    git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git
-RUN set -ex;\
+    git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git;\
     cd /synapse;\
-    : hack as synapse/types.py does a messy shadow ;\
-    cp synapse/python_dependencies.py /tmp;\
-    python3 /tmp/python_dependencies.py | grep -v eliot|xargs python3 -m pip install --upgrade;\
-    python3 -m pip install --upgrade python-ldap;\
-    : already in stdlib python3 -m pip install --upgrade enum34;\
-    python3 -m pip install --upgrade ipaddress;\
-    python3 -m pip install --upgrade lxml;\
-    python3 -m pip install --upgrade $(pwd)[all];\
+    python synapse/python_dependencies.py | grep -v eliot|xargs pip install --upgrade;\
+    pip install --upgrade python-ldap;\
+    pip install --upgrade enum34;\
+    pip install --upgrade ipaddress;\
+    pip install --upgrade lxml;\
+    pip install --upgrade $(pwd)[all];\
     GIT_SYN=$(git ls-remote ${MATRIX_URL} $BV_SYN | cut -f 1);\
     echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version;\
     cd /;\
@@ -118,9 +112,11 @@ COPY adds/start.sh /start.sh
 # add supervisor configs
 COPY adds/supervisord-matrix.conf /conf/
 COPY adds/supervisord.conf /
+RUN sed -i -re "s/python3/python/g" /conf/*
 
 # startup configuration
 ENTRYPOINT ["/start.sh"]
+ENV MATRIX_PYTHON=python3
 CMD ["start"]
 EXPOSE 8448
 

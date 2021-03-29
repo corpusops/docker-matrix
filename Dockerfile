@@ -1,9 +1,9 @@
 FROM debian:buster
 # Git branch to build from
-ARG BV_SYN=master
 # use --build-arg REBUILD=$(date) to invalidate the cache and upgrade all
 # packages
 ARG REBUILD=0
+ARG PY_VER=3.7
 
 VOLUME ["/data"]
 
@@ -23,68 +23,72 @@ RUN set -ex;\
     apt-get update -y;\
     apt-get install -y \
         bash \
-        curl postgresql-client\
         coreutils \
+        curl \
         file \
         gcc \
         git \
+        gosu \
         libevent-2.1-6 \
         libevent-dev \
-        libffi-dev \
         libffi6 \
+        libffi-dev \
         libgnutls28-dev \
         libjpeg62-turbo \
         libjpeg62-turbo-dev \
         libldap-2.4-2 \
         libldap2-dev \
+        libpq5 \
+        libpq-dev\
         libsasl2-dev \
         libsqlite3-dev \
-        libssl-dev \
         libssl1.1 \
+        libssl-dev \
         libtool \
+        libwebp6 \
+        libwebp-dev \
         libxml2 \
         libxml2-dev \
-        libxslt1-dev \
         libxslt1.1 \
+        libxslt1-dev \
         linux-headers-amd64 \
         make \
+        postgresql-client\
         pwgen \
-        python \
-        python-dev \
-        libpq5 libpq-dev\
+        python${PY_VER} \
+        python${PY_VER}-distutils \
+        python${PY_VER}-lib2to3 \
+        libpython${PY_VER} \
+        python${PY_VER}-dev \
+        libpython${PY_VER}-dev \
         sqlite \
+        xmlsec1 \
         zlib1g \
-        zlib1g-dev;\
-    :;\
-    curl -O https://bootstrap.pypa.io/get-pip.py;\
-    python get-pip.py;\
-    apt-get install -y \
-        python-virtualenv;\
-    pip install --upgrade pip;\
-    pip install --upgrade supervisor
+        zlib1g-dev
+RUN curl -O https://bootstrap.pypa.io/get-pip.py;\
+    python3 get-pip.py;\
+    python3 -m pip install --upgrade pip virtualenv supervisor
+RUN python3 -m pip install --upgrade python-ldap ipaddress lxml
 # Git branch to build from
+WORKDIR /synapse
+ARG BV_SYN=master
 RUN set -ex;\
     :;\
-    git clone https://github.com/maxidor/matrix-synapse-rest-auth.git;\
-    cd matrix-synapse-rest-auth;\
-    for i in /usr/lib/python*/dist-packages/; do\
-      cp -fv rest_auth_provider.py "$i";\
-    done;\
-    cd /;\
-    :;\
-    git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git;\
-    cd /synapse;\
-    python synapse/python_dependencies.py | grep -v eliot|xargs pip install --upgrade;\
-    pip install --upgrade python-ldap;\
-    pip install --upgrade enum34;\
-    pip install --upgrade ipaddress;\
-    pip install --upgrade lxml;\
-    pip install --upgrade $(pwd)[all];\
+    git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git .
+RUN set -ex;\
+    : hack as synapse/types.py does a messy shadow ;\
+    cp synapse/python_dependencies.py /tmp;\
+    python3 /tmp/python_dependencies.py|grep -v eliot|sed -re "s/;python_version.*//g" > reqs.txt;\
+    echo installing;cat reqs.txt;\
+    python3 -m pip install --upgrade -r reqs.txt
+RUN python3 -m pip install git+https://github.com/ma1uta/matrix-synapse-rest-password-provider
+RUN set -ex;\
+    python3 -m pip install --upgrade $(pwd)[all];\
     GIT_SYN=$(git ls-remote ${MATRIX_URL} $BV_SYN | cut -f 1);\
-    echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version;\
-    cd /;\
+    echo "synapse: $BV_SYN ($GIT_SYN)" >> /synapse.version
+WORKDIR /
+RUN set -ex;\
     rm -rf /synapse;\
-    :;\
     apt-get autoremove -y \
         file \
         gcc \
@@ -101,7 +105,8 @@ RUN set -ex;\
         libxslt1-dev \
         linux-headers-amd64 \
         make \
-        python-dev \
+        python${PY_VER}-dev \
+        libpython${PY_VER}-dev \
         zlib1g-dev;\
     :;\
     apt-get autoremove -y ;\
@@ -112,11 +117,9 @@ COPY adds/start.sh /start.sh
 # add supervisor configs
 COPY adds/supervisord-matrix.conf /conf/
 COPY adds/supervisord.conf /
-RUN sed -i -re "s/python3/python/g" /conf/*
 
 # startup configuration
 ENTRYPOINT ["/start.sh"]
-ENV MATRIX_PYTHON=python3
 CMD ["start"]
 EXPOSE 8448
 
