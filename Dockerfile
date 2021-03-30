@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM corpusops/debian-bare:buster
 # Git branch to build from
 # use --build-arg REBUILD=$(date) to invalidate the cache and upgrade all
 # packages
