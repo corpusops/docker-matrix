@@ -47,10 +47,14 @@ RUN set -ex;\
         libtool \
         libwebp6 \
         libwebp-dev \
+        xmlsec1 \
+        libjemalloc2 \
         libxml2 \
         libxml2-dev \
         libxslt1.1 \
         libxslt1-dev \
+        openssl \
+        rustc \
         linux-headers-amd64 \
         make \
         postgresql-client\
