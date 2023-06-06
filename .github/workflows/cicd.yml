@@ -41,7 +41,7 @@ jobs:
       fail-fast: false
       matrix:
         IMGV:
-        - "v1.84.1"
+        - "v1.85.0"
         IMG: ["corpusops/docker-matrix"]
         DFILE: ["Dockerfile"]
         DPATH: ["."]
