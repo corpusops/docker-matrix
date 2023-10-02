@@ -81,10 +81,10 @@ RUN set -ex;\
     git clone --branch $BV_SYN --depth 1 ${MATRIX_URL}.git .
 RUN set -ex;\
     : hack as synapse/types.py does a messy shadow ;\
-    cp synapse/python_dependencies.py /tmp;\
-    python3 /tmp/python_dependencies.py|grep -v eliot|sed -re "s/;python_version.*//g" > reqs.txt;\
+    : cp synapse/python_dependencies.py /tmp;\
+    : python3 /tmp/python_dependencies.py|grep -v eliot|sed -re "s/;python_version.*//g" > reqs.txt;\
     echo installing;cat reqs.txt;\
-    python3 -m pip install --upgrade -r reqs.txt
+    python3 -m pip install --upgrade .
 RUN python3 -m pip install git+https://github.com/ma1uta/matrix-synapse-rest-password-provider
 RUN set -ex;\
     python3 -m pip install --upgrade $(pwd)[all];\
