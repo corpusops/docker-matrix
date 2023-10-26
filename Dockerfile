@@ -12,7 +12,7 @@ RUN set -ex;\
         coreutils \
         file \
         libevent-2.1-7 \
-        libldap-2.4-2 \
+        libldap-2.5-0 \
         libpq5 \
         postgresql-client\
     && rm -rf /var/lib/apt/lists/*
