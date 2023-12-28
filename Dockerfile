@@ -52,7 +52,3 @@ FROM corpusops/debian-bare:buster as HELPERS
 FROM BASE as RUNNER
 COPY --from=HELPERS /cops_helpers /usr/local/bin
 COPY --from=BUILDER /install /usr/local
-COPY adds/start.sh /start.sh
-COPY adds/supervisord-matrix.conf /conf/
-COPY adds/supervisord.conf /
-
