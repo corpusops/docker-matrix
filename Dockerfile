@@ -46,7 +46,6 @@ RUN set -ex;\
 RUN python3 -m pip install --prefix=/install --upgrade supervisor
 RUN python3 -m pip install --prefix=/install --upgrade python-ldap ipaddress lxml
 RUN python3 -m pip install --prefix=/install git+https://github.com/ma1uta/matrix-synapse-rest-password-provider
-# install homerserver template
 
 FROM corpusops/debian-bare:buster as HELPERS
 FROM BASE as RUNNER
