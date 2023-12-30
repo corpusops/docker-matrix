@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 ARG BV_SYN=master
-FROM matrixdotorg/synapse:${BV_SYN} as BASE
+FROM matrixdotorg/synapse:${BV_SYN} as base
 RUN set -ex;\
     export DEBIAN_FRONTEND=noninteractive;\
     mkdir -p /var/cache/apt/archives;\
@@ -17,7 +17,7 @@ RUN set -ex;\
         postgresql-client\
     && rm -rf /var/lib/apt/lists/*
 
-FROM BASE as BUILDER
+FROM base as builder
 RUN set -ex;\
     export DEBIAN_FRONTEND=noninteractive;\
     apt-get clean;\
@@ -47,7 +47,7 @@ RUN python3 -m pip install --prefix=/install --upgrade supervisor
 RUN python3 -m pip install --prefix=/install --upgrade python-ldap ipaddress lxml
 RUN python3 -m pip install --prefix=/install git+https://github.com/ma1uta/matrix-synapse-rest-password-provider
 
-FROM corpusops/debian-bare:buster as HELPERS
-FROM BASE as RUNNER
-COPY --from=HELPERS /cops_helpers /usr/local/bin
-COPY --from=BUILDER /install /usr/local
+FROM corpusops/debian-bare:buster as helpers
+FROM base as runner
+COPY --from=helpers /cops_helpers /usr/local/bin
+COPY --from=builder /install /usr/local
