@@ -47,5 +47,5 @@ jobs:
         DPATH: ["."]
         PY_VER: ["3.7"]
 on:
-  push:
-  workflow_dispatch:
+  # push:
+  # workflow_dispatch:
